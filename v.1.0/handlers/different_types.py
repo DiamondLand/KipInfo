@@ -44,7 +44,11 @@ async def message_with_gif(message: Message):
 
 @router.message(F.text)
 async def message_with_text(message: Message):
-    answer = await answer_for_question(question=message.text)
+    question, answer = await answer_for_question(question=message.text)
     await message.answer(
-        text=f"<code>Ответ:</code>\n{answer}\n\n<i>* Если ответ не совпал с вашим вопросом, вы можете просмотреть ЧаВо по команде /info.</i>"
+        text=f"<code>Ваш вопрос:</code>\
+            \n<i>{question}</i>\
+            \n\n<code>Ответ на вопрос:</code>\
+            \n<i>{answer}</i>\
+            \n\n* Если ответ не совпал с вашим вопросом, вы можете просмотреть ЧаВо по команде /info."
     )
