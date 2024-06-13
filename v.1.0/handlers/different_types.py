@@ -4,7 +4,6 @@ from aiogram import Router, F
 from aiogram.types import Message
 
 from functions.get_answer import answer_for_question
-from functions.greeting import send_greeting
 
 router = Router()
 
