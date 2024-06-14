@@ -1,7 +1,14 @@
 import json
 import re
+import warnings
 
 from fuzzywuzzy import fuzz, process
+
+
+try:
+    import Levenshtein
+except ImportError:
+    warnings.warn('Using slow pure-python SequenceMatcher. Install python-Levenshtein to remove this warning')
 
 
 def preprocess_text(text: str) -> str:
@@ -11,7 +18,6 @@ def preprocess_text(text: str) -> str:
     text = text.lower()
     text = re.sub(r'[^\w\s]', '', text)  # Удаление знаков препинания
     return text
-
 
 def find_best_match(question: str, all_questions: list, threshold: int = 80) -> str:
     """
@@ -28,7 +34,6 @@ def find_best_match(question: str, all_questions: list, threshold: int = 80) -> 
         best_match_index = preprocessed_questions.index(closest_matches[0][0])
         return all_questions[best_match_index]
     return None
-
 
 def keyword_match(question: str, keywords: list) -> bool:
     """

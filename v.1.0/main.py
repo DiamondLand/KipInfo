@@ -17,7 +17,7 @@ config.read("config.ini")
 
 bot = Bot(config["SETTINGS"]["token"], default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 bot.config = config
-bot.ADMINS_IDS = [872278858, 872278858]
+bot.ADMINS_IDS = [872278858, 767922691]
 
 dp = Dispatcher()
 
