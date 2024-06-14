@@ -1,7 +1,8 @@
 import json
 import re
+
 from fuzzywuzzy import fuzz, process
-import difflib
+
 
 def preprocess_text(text: str) -> str:
     """
@@ -10,6 +11,7 @@ def preprocess_text(text: str) -> str:
     text = text.lower()
     text = re.sub(r'[^\w\s]', '', text)  # Удаление знаков препинания
     return text
+
 
 def find_best_match(question: str, all_questions: list, threshold: int = 80) -> str:
     """
@@ -27,6 +29,7 @@ def find_best_match(question: str, all_questions: list, threshold: int = 80) -> 
         return all_questions[best_match_index]
     return None
 
+
 def keyword_match(question: str, keywords: list) -> bool:
     """
     Функция для проверки наличия ключевых слов в вопросе с использованием fuzzywuzzy.
@@ -38,6 +41,7 @@ def keyword_match(question: str, keywords: list) -> bool:
         if fuzz.partial_ratio(preprocessed_question, preprocessed_keyword) > 80:
             return True
     return False
+
 
 async def answer_for_question(question: str) -> str:
     with open('assets/questions.json', 'r', encoding='utf-8') as file:
@@ -58,4 +62,4 @@ async def answer_for_question(question: str) -> str:
             if qa["question"] == closest_question:
                 return qa["question"], qa["answer"]
 
-    return "Вопрос некорректен", "Извините, я не нашёл ответа на ваш вопрос 😔."
+    return "Вопрос некорректен", "Извините, я не нашёл ответа 😔."

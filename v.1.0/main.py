@@ -1,4 +1,5 @@
 import configparser
+import logging
 import asyncio
 
 from aiogram import Bot, Dispatcher
@@ -14,7 +15,7 @@ from handlers import commands_handler, different_types
 config = configparser.ConfigParser()
 config.read("config.ini")
 
-bot = Bot(config["SETTINGS"]["testing_token"], default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+bot = Bot(config["SETTINGS"]["token"], default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 bot.config = config
 bot.ADMINS_IDS = [872278858, 872278858]
 
@@ -23,6 +24,13 @@ dp = Dispatcher()
 
 # --- Подгрузка модулей --- #
 async def main():
+    # Настройка конфигурации логгера
+    logging.basicConfig(
+        filename='logs/autoBot.log', 
+        level=logging.INFO, 
+        format='%(asctime)s - %(levelname)s - %(message)s'
+    )
+
     logger.info("Loading modules...")
     dp.include_routers(
         error_handler.router,
