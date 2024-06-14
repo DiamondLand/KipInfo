@@ -1,14 +1,28 @@
 import json
+import logging
 
 from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
 from aiogram.enums.chat_type import ChatType
-from aiogram.utils.markdown import hlink
 
 from functions.greeting import send_greeting
 
 router = Router()
+
+MAX_MESSAGE_LENGTH = 4096
+
+
+def split_text(text, max_length):
+    chunks = []
+    while len(text) > max_length:
+        split_index = text.rfind('\n\n', 0, max_length)
+        if split_index == -1:
+            split_index = max_length
+        chunks.append(text[:split_index])
+        text = text[split_index:]
+    chunks.append(text)
+    return chunks
 
 
 # --- Основная панель --- #
@@ -41,8 +55,11 @@ async def info_cmd(message: Message):
             faq_list.append(f"<code>{index}. Вопрос:</code>\n<i>{question}</i>\n<code>Ответ на вопрос:</code>\n<i>{answer}</i>\n")
         
         faq_text = "\n\n".join(faq_list)
-        await message.answer(text=faq_text)
 
-    except Exception as e:
-        print(e)
+        text_chunks = split_text(faq_text, MAX_MESSAGE_LENGTH)
+        for chunk in text_chunks:
+            await message.answer(text=chunk)
+
+    except Exception as _ex:
+        logging.error(_ex)
         await message.answer(text="Произошла ошибка при генерации ЧаВо 🥺.")
