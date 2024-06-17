@@ -67,4 +67,4 @@ async def answer_for_question(question: str) -> str:
             if qa["question"] == closest_question:
                 return qa["question"], qa["answer"]
 
-    return "Вопрос некорректен", "Извините, я не нашёл ответа 😔."
+    return "Вопрос некорректен", "Телефоны для справок: +7 (499) 553-14-28 доб.8;\n+7 (925) 613-09-67\nПочта: priemka@fa.ru"
