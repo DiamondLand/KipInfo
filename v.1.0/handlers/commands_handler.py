@@ -6,6 +6,7 @@ from aiogram.filters import Command
 from aiogram.types import Message
 from aiogram.enums.chat_type import ChatType
 
+from elements.kb import main_menu_kb
 from functions.greeting import send_greeting
 
 router = Router()
@@ -32,7 +33,10 @@ async def start_cmd(message: Message):
     if message.chat.type == ChatType.GROUP or message.chat.type == ChatType.SUPERGROUP:
         return
 
-    await message.answer(text=f"{send_greeting(username=message.from_user.username)}\nЧётко сформулируйте ваш вопрос и напишите его в чат:")
+    await message.answer(
+        text=f"{send_greeting(username=message.from_user.username)}\nВас приветствует бот приёмной комиссии КИПФИН!\n\nЧётко сформулируйте ваш вопрос и напишите его в чат или же выберите по кнопкам ниже:",
+        reply_markup=main_menu_kb()
+    )
 
 
 # --- Информационнная панель --- #
