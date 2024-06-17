@@ -34,7 +34,7 @@ async def start_cmd(message: Message):
         return
 
     await message.answer(
-        text=f"{send_greeting(username=message.from_user.username)}\nВас приветствует бот приёмной комиссии КИПФИН!\n\nЧётко сформулируйте ваш вопрос и напишите его в чат или же выберите по кнопкам ниже:",
+        text=f"{send_greeting(username=message.from_user.username)}\n<b>Вас приветствует бот приёмной комиссии КИПФИН!</b>\n\nЧётко сформулируйте ваш вопрос и напишите его в чат, либо же выберите по кнопкам ниже:",
         reply_markup=main_menu_kb()
     )
 
