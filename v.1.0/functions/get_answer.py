@@ -52,19 +52,19 @@ async def answer_for_question(question: str) -> str:
     with open('assets/questions.json', 'r', encoding='utf-8') as file:
         data = json.load(file)
 
-    questions_and_answers = data["questions_and_answers"]
-    all_questions = [qa["question"] for qa in questions_and_answers]
+    questions_and_answers = data['questions_and_answers']
+    all_questions = [qa['question'] for qa in questions_and_answers]
 
     # Поиск по ключевым словам с частичным совпадением
     for qa in questions_and_answers:
         if keyword_match(question, qa.get("keywords", [])):
-            return qa["question"], qa["answer"]
+            return qa['question'], qa['answer']
 
     # Поиск по формулировке вопроса
     closest_question = find_best_match(question, all_questions)
     if closest_question:
         for qa in questions_and_answers:
-            if qa["question"] == closest_question:
-                return qa["question"], qa["answer"]
+            if qa['question'] == closest_question:
+                return qa['question'], qa['answer']
 
-    return "Вопрос некорректен", "Телефоны для справок: +7 (499) 553-14-28 доб.8;\n+7 (925) 613-09-67\nПочта: priemka@fa.ru"
+    return "Вопрос не найден в базе заниний 😔", questions_and_answers[0]['answer']

@@ -4,7 +4,6 @@ import logging
 from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
-from aiogram.enums.chat_type import ChatType
 
 from elements.kb import main_menu_kb
 from functions.greeting import send_greeting
@@ -28,35 +27,33 @@ def split_text(text, max_length):
 
 # --- Основная панель --- #
 @router.message(Command("start", "schedule"))
-async def start_cmd(message: Message):
-    # Запрещаем доступ к команде если это группы
-    if message.chat.type == ChatType.GROUP or message.chat.type == ChatType.SUPERGROUP:
-        return
+async def start_cmd(message: Message):    
+    try:
+        with open('assets/questions.json', 'r', encoding='utf-8') as file:
+            data = json.load(file)
+        questions_and_answers = data['questions_and_answers']
 
-    await message.answer(
-        text=f"{send_greeting(username=message.from_user.username)}\n<b>Вас приветствует бот приёмной комиссии КИПФИН!</b>\n\nЧётко сформулируйте ваш вопрос и напишите его в чат, либо же выберите по кнопкам ниже:",
-        reply_markup=main_menu_kb()
-    )
+        await message.answer(text=f"{send_greeting(username=message.from_user.username)}\n<b>Вас приветствует бот приёмной комиссии КИПФИН!</b>\n\n{questions_and_answers[1]['answer']}")
+        await message.answer(
+            text=f"Чётко сформулируйте ваш вопрос и напишите его в чат, либо же выберите по кнопкам ниже:",
+            reply_markup=main_menu_kb()
+        )
+    except Exception as _ex:
+        logging.error(_ex)
+        await message.answer(text="Произошла ошибка при генерации ЧаВо 😔.")
 
 
 # --- Информационнная панель --- #
 @router.message(Command("info"))
 async def info_cmd(message: Message):
-    # Запрещаем доступ к команде если это группы
-    if message.chat.type == ChatType.GROUP or message.chat.type == ChatType.SUPERGROUP:
-        return
-
     try:
         with open('assets/questions.json', 'r', encoding='utf-8') as file:
             data = json.load(file)
-        
-        questions_and_answers = data["questions_and_answers"]
+        questions_and_answers = data['questions_and_answers']
         
         faq_list = []
         for index, qa in enumerate(questions_and_answers, start=1):
-            question = qa["question"]
-            answer = qa["answer"]
-            faq_list.append(f"<code>{index}. Вопрос:</code>\n<i>{question}</i>\n<code>Ответ на вопрос:</code>\n<i>{answer}</i>\n")
+            faq_list.append(f"<code>{index}. Вопрос:</code>\n<i>{qa['question']}</i>\n<code>Ответ на вопрос:</code>\n<i>{qa['answer']}</i>\n")
         
         faq_text = "\n\n".join(faq_list)
 
