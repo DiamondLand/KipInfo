@@ -39,7 +39,7 @@ async def start_cmd(message: Message, state: FSMContext):
             data = json.load(file)
         questions_and_answers = data['questions_and_answers']
 
-        await message.answer(text=f"{send_greeting(username=message.from_user.username)}\n<b>Вас приветствует бот приёмной комиссии КИПФИН!</b>\n\n{questions_and_answers[1]['answer']}\n\n* {hlink('KИПФИН | Общение', 'https://t.me/KipFinchikBot')} - наш телеграм бот для поиска новых знакомст 😊!")
+        await message.answer(text=f"{send_greeting(username=message.from_user.username)}\n<b>Вас приветствует бот приёмной комиссии КИПФИН!</b>\n\n{questions_and_answers[1]['answer']}\n\n* {hlink('KИПФИН | Общение', 'https://t.me/KipFinchikBot')} - наш телеграм бот для поиска новых знакомств 😊!")
     except Exception as _e:
         logging.error(_e)
 
