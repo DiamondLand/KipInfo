@@ -28,17 +28,17 @@ async def mailing_send(message: Message, state: FSMContext):
     await msg.delete()
     await message.answer(text=f"<b>💥💥💥 Рассылка запущена!</b>")
 
-    for user_id in all_profiles[0]:
+    for user_id in all_profiles:
         try: # Пытаемся отправить соообщение пользователю
             await message.bot.send_message(
-                chat_id=user_id['user_id'], 
+                chat_id=int(user_id['user_id']), 
                 text=f"Рассылка от @{message.from_user.username}:\n—\n{message.text}"
             )
             counter += 1
         except:
-            ...
+            pass
 
     await message.answer(
         text=f"<b>Рассылка закончена!</b>\
-            \n\nОтправлено {counter}/{len(all_profiles[0])}."
+            \n\nОтправлено {counter}/{len(all_profiles)}."
     )

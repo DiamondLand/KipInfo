@@ -44,7 +44,7 @@ async def start_cmd(message: Message, state: FSMContext):
         logging.error(_e)
 
     await message.answer(
-        text=f"<i>* Рекомендуем заглянуть в {hlink('KИПФИН | Общение', 'https://t.me/KipFinchikBot')}. Новые знакомства и приятное общение c аббитуриентами, выпускниками и студентами <u>КИПФИН</u>, <u>МФК</u>, <u>лицеем</u> ждут вас 💪💖!"
+        text=f"<i>* Рекомендуем заглянуть в {hlink('KИПФИН | Общение', 'https://t.me/KipFinchikBot')}. Новые знакомства и приятное общение c <u>абитуриентами</u>, <u>выпускниками</u> и <u>студентами</u> КИПФИН, МФК, лицеем ждут вас 💪💖!</i>"
     )
     await message.answer(
         text=f"Чётко сформулируйте ваш вопрос и напишите его в чат, либо же выберите по кнопкам ниже:",
@@ -82,7 +82,7 @@ async def info_cmd(message: Message, state: FSMContext):
 # --- Статистика --- #
 @router.message(Command("statistic", "bin"))
 async def statistic_cmd(message: Message, state: FSMContext):
-    if int(message.from_user.id) not in map(int, [767922691, 872278858]):
+    if int(message.from_user.id) not in map(int, message.bot.ADMINS_IDS):
         return
 
     # Если стадия существует, выходим из неё
@@ -91,7 +91,7 @@ async def statistic_cmd(message: Message, state: FSMContext):
 
     users_count = f"<b>Пользователей:</b> <code>{len(await get_users_service())}</code>"
     await message.answer(text=f"<b>СТАТИСТИКА:</b>\
-                            \n\n{users_count}\
+                            \n{users_count}\
                             \n\n<b>CPU:</b> <code>{psutil.cpu_percent(interval=1)}</code> | <b>RAM:</b> <code>{psutil.virtual_memory().percent}</code>%\
                             \n<b>Использовано дискового пространства:</b> <code>{psutil.disk_usage('/').percent}</code>%"
     )
@@ -100,7 +100,7 @@ async def statistic_cmd(message: Message, state: FSMContext):
 # --- Перейти в рассылку -> Написать текст --- #
 @router.message(Command("mailing", "bin2"))
 async def mailing_cmd(message: Message, state: FSMContext):
-    if int(message.from_user.id) not in map(int, [767922691, 872278858]):
+    if int(message.from_user.id) not in map(int, message.bot.ADMINS_IDS):
         return
 
     # Если стадия существует, выходим из неё
