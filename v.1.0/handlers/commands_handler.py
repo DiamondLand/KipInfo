@@ -39,13 +39,10 @@ async def start_cmd(message: Message, state: FSMContext):
             data = json.load(file)
         questions_and_answers = data['questions_and_answers']
 
-        await message.answer(text=f"{send_greeting(username=message.from_user.username)}\n<b>Вас приветствует бот приёмной комиссии КИПФИН!</b>\n\n{questions_and_answers[1]['answer']}")
+        await message.answer(text=f"{send_greeting(username=message.from_user.username)}\n<b>Вас приветствует бот приёмной комиссии КИПФИН!</b>\n\n{questions_and_answers[1]['answer']}\n\n* {hlink('KИПФИН | Общение', 'https://t.me/KipFinchikBot')} - наш телеграм бот для поиска новых знакомст 😊!")
     except Exception as _e:
         logging.error(_e)
 
-    await message.answer(
-        text=f"<i>* Рекомендуем заглянуть в {hlink('KИПФИН | Общение', 'https://t.me/KipFinchikBot')}. Новые знакомства и приятное общение c <u>абитуриентами</u>, <u>выпускниками</u> и <u>студентами</u> КИПФИН, МФК, лицеем ждут вас 💪💖!</i>"
-    )
     await message.answer(
         text=f"Чётко сформулируйте ваш вопрос и напишите его в чат, либо же выберите по кнопкам ниже:",
         reply_markup=main_menu_kb()
