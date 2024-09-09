@@ -1,5 +1,5 @@
 loguru==0.7.2
-aiogram==3.6.0
-configparser==5.2.0
+aiogram==3.12.0
+configparser==7.1.0
 python_Levenshtein==0.25.1
 fuzzywuzzy==0.18.0

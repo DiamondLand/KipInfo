@@ -1,4 +1,4 @@
-from loguru import logger
+import logging
 
 from aiogram import Router
 from aiogram.types import ErrorEvent
@@ -9,58 +9,58 @@ from aiogram.exceptions import (AiogramError, TelegramAPIError, CallbackAnswerEx
 router = Router()
 
 
-# --- Обработчик ошибок ---
+# --- Обработчик ошибок --- #
 @router.error()
 async def errors_handler(event: ErrorEvent):
     # Предупреждения
     if isinstance(event.exception, UnsupportedKeywordArgument):
-        logger.warning(f"UnsupportedKeywordArgument: {event.exception}")
+       logging.warning(f"UnsupportedKeywordArgument: {event.exception}")
 
     elif isinstance(event.exception, TelegramNetworkError):
-       logger.warning("NetworkError")
+       logging.warning("NetworkError")
 
     elif isinstance(event.exception, TelegramBadRequest):
-        logger.warning(f"TelegramBadRequest: {event.exception}")
+        logging.warning(f"TelegramBadRequest: {event.exception}")
 
     elif isinstance(event.exception, TelegramNotFound):
-        logger.warning(f"TelegramNotFound: {event.exception}")
+        logging.warning(f"TelegramNotFound: {event.exception}")
 
     elif isinstance(event.exception, TelegramConflictError):
-        logger.warning(f"TelegramConflictError: {event.exception}")
+        logging.warning(f"TelegramConflictError: {event.exception}")
 
     elif isinstance(event.exception, TelegramServerError):
-        logger.warning(f"TelegramServerError: {event.exception}")
+        logging.warning(f"TelegramServerError: {event.exception}")
         
     elif isinstance(event.exception, CallbackAnswerException):
-        logger.warning(f"CallbackException: {event.exception}")
+        logging.warning(f"CallbackException: {event.exception}")
 
     elif isinstance(event.exception, SceneException):
-        logger.warning(f"SceneException: {event.exception}")
+        logging.warning(f"SceneException: {event.exception}")
 
     elif isinstance(event.exception, TelegramRetryAfter):
-        logger.warning(f"TelegramRetryAfter: {event.exception}")
+        logging.warning(f"TelegramRetryAfter: {event.exception}")
 
     elif isinstance(event.exception, TelegramMigrateToChat):
-        logger.warning(f"TelegramMigrateToChat: {event.exception}")
+        logging.warning(f"TelegramMigrateToChat: {event.exception}")
 
     elif isinstance(event.exception, TelegramForbiddenError):
-        logger.warning(f"TelegramForbiddenError: {event.exception}")
+        logging.warning(f"TelegramForbiddenError: {event.exception}")
 
     elif isinstance(event.exception, TelegramEntityTooLarge):
-        logger.warning(f"TelegramEntityTooLarge: {event.exception}")
+        logging.warning(f"TelegramEntityTooLarge: {event.exception}")
 
     elif isinstance(event.exception, ClientDecodeError):
-        logger.warning(f"ClientDecodeError: {event.exception}")
+        logging.warning(f"ClientDecodeError: {event.exception}")
 
     # Ошибки
     elif isinstance(event.exception, AiogramError):
-        logger.error(f"AiogramError: {event.exception}")
+        logging.error(f"AiogramError: {event.exception}")
 
     elif isinstance(event.exception, TelegramAPIError):
-        logger.error(f"TelegramAPIError: {event.exception}")
+        logging.error(f"TelegramAPIError: {event.exception}")
     
     elif isinstance(event.exception, TelegramUnauthorizedError):
-        logger.error(f"TelegramUnauthorizedError: {event.exception}")
+        logging.error(f"TelegramUnauthorizedError: {event.exception}")
     
     elif isinstance(event.exception, RestartingTelegram):
-        logger.error(f"RestartingTelegram: {event.exception}")
+        logging.error(f"RestartingTelegram: {event.exception}")

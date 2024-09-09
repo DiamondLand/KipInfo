@@ -39,7 +39,7 @@ async def start_cmd(message: Message, state: FSMContext):
             data = json.load(file)
         questions_and_answers = data['questions_and_answers']
 
-        await message.answer(text=f"{send_greeting(username=message.from_user.username)}\n<b>Вас приветствует бот приёмной комиссии КИПФИН!</b>\n\n{questions_and_answers[1]['answer']}\n\n* {hlink('KИПФИН | Общение', 'https://t.me/KipFinchikBot')} - наш телеграм бот для поиска новых знакомств 😊!")
+        await message.answer(text=f"{send_greeting(username=message.from_user.username)}\n<b>Вас приветствует информационно-новостной бот КИПФИН!</b>\n\n{questions_and_answers[1]['answer']}\n\n* {hlink('KИПФИН | Общение', 'https://t.me/KipFinchikBot')} - наш телеграм бот для поиска новых знакомств 😊!")
     except Exception as _e:
         logging.error(_e)
 
@@ -79,30 +79,27 @@ async def info_cmd(message: Message, state: FSMContext):
 # --- Статистика --- #
 @router.message(Command("statistic", "bin"))
 async def statistic_cmd(message: Message, state: FSMContext):
-    if int(message.from_user.id) not in map(int, message.bot.ADMINS_IDS):
-        return
+    if int(message.from_user.id) in map(int, message.bot.ADMINS_IDS):
+        # Если стадия существует, выходим из неё
+        if await state.get_state() is not None:
+            await state.clear()
 
-    # Если стадия существует, выходим из неё
-    if await state.get_state() is not None:
-        await state.clear()
-
-    users_count = f"<b>Пользователей:</b> <code>{len(await get_users_service())}</code>"
-    await message.answer(text=f"<b>СТАТИСТИКА:</b>\
-                            \n{users_count}\
-                            \n\n<b>CPU:</b> <code>{psutil.cpu_percent(interval=1)}</code> | <b>RAM:</b> <code>{psutil.virtual_memory().percent}</code>%\
-                            \n<b>Использовано дискового пространства:</b> <code>{psutil.disk_usage('/').percent}</code>%"
-    )
+        users_count = f"<b>Пользователей:</b> <code>{len(await get_users_service())}</code>"
+        await message.answer(text=f"<b>СТАТИСТИКА:</b>\
+                                \n{users_count}\
+                                \n\n<b>CPU:</b> <code>{psutil.cpu_percent(interval=1)}</code> | <b>RAM:</b> <code>{psutil.virtual_memory().percent}</code>%\
+                                \n<b>Использовано дискового пространства:</b> <code>{psutil.disk_usage('/').percent}</code>%"
+        )
 
 
 # --- Перейти в рассылку -> Написать текст --- #
 @router.message(Command("mailing", "bin2"))
 async def mailing_cmd(message: Message, state: FSMContext):
-    if int(message.from_user.id) not in map(int, message.bot.ADMINS_IDS):
-        return
+    if int(message.from_user.id) in map(int, message.bot.ADMINS_IDS):
 
-    # Если стадия существует, выходим из неё
-    if await state.get_state() is not None:
-        await state.clear()
+        # Если стадия существует, выходим из неё
+        if await state.get_state() is not None:
+            await state.clear()
 
-    await message.answer(text="💥 Введите текст, который будет отправлен всем пользователям:")
-    await state.set_state(InsertMailingText.text)
+        await message.answer(text="💥 Введите текст, который будет отправлен всем пользователям:")
+        await state.set_state(InsertMailingText.text)

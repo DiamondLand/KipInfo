@@ -41,7 +41,7 @@ async def message_with_sticker(message: Message):
 async def message_with_gif(message: Message):
     await message.answer(text=random.choice(thank_you_animation_messages))
 
-@router.message(F.text)
+@router.message(F.text) #* Точка входа в основную логику бота
 async def message_with_text(message: Message):
     question, answer = await answer_for_question(question=message.text)
     await message.answer(

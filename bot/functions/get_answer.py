@@ -2,13 +2,12 @@ import json
 import re
 import warnings
 
-from fuzzywuzzy import fuzz, process
-
-
 try:
     import Levenshtein
 except ImportError:
     warnings.warn('Using slow pure-python SequenceMatcher. Install python-Levenshtein to remove this warning')
+
+from fuzzywuzzy import fuzz, process
 
 
 def preprocess_text(text: str) -> str:
@@ -19,9 +18,9 @@ def preprocess_text(text: str) -> str:
     text = re.sub(r'[^\w\s]', '', text)  # Удаление знаков препинания
     return text
 
-def find_best_match(question: str, all_questions: list, threshold: int = 80) -> str:
+def find_best_match(question: str, all_questions: list, threshold: int = 90) -> str:
     """
-    Функция для нахождения наиболее похожего вопроса с использованием fuzzywuzzy.
+    Функция для нахождения наиболее похожего вопроса в базе знаний с использованием fuzzywuzzy.
     """
     preprocessed_question = preprocess_text(question)
     preprocessed_questions = [preprocess_text(q) for q in all_questions]
@@ -47,7 +46,6 @@ def keyword_match(question: str, keywords: list) -> bool:
             return True
     return False
 
-
 async def answer_for_question(question: str) -> str:
     with open('assets/questions.json', 'r', encoding='utf-8') as file:
         data = json.load(file)
@@ -55,16 +53,16 @@ async def answer_for_question(question: str) -> str:
     questions_and_answers = data['questions_and_answers']
     all_questions = [qa['question'] for qa in questions_and_answers]
 
-    # Поиск по ключевым словам с частичным совпадением
-    for qa in questions_and_answers:
-        if keyword_match(question, qa.get("keywords", [])):
-            return qa['question'], qa['answer']
-
     # Поиск по формулировке вопроса
     closest_question = find_best_match(question, all_questions)
     if closest_question:
         for qa in questions_and_answers:
             if qa['question'] == closest_question:
                 return qa['question'], qa['answer']
+    
+    # Поиск по ключевым словам с частичным совпадением (если не найдено похожего вопроса)
+    for qa in questions_and_answers:
+        if keyword_match(question, qa.get("keywords", [])):
+            return qa['question'], qa['answer']
 
     return "Вопрос не найден в базе заниний 😔", questions_and_answers[0]['answer']
